@@ -16,11 +16,13 @@ type Dataset struct {
 	Size      int       `json:"size"`
 }
 
-var datasetList = []Dataset{}
+var datasetList []Dataset
 
-func init() {
+func GetDatasets(c echo.Context) error {
+
 	files, _ := utils.ListFolder("files")
 
+	datasetList = []Dataset{}
 	for i := 0; i < len(files); i++ {
 		datasetList = append(datasetList, Dataset{
 			Id:        gofakeit.UUID(),
@@ -30,9 +32,6 @@ func init() {
 			Size:      gofakeit.Number(100, 10000),
 		})
 	}
-}
-
-func GetDatasets(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status": 200,
