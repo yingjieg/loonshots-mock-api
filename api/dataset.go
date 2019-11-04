@@ -16,7 +16,7 @@ type Dataset struct {
 	Size      int       `json:"size"`
 }
 
-var datasetList []Dataset
+var datasetList = []Dataset{}
 
 func init() {
 	files, _ := utils.ListFolder("files")

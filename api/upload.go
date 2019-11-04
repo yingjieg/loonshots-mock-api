@@ -1,11 +1,12 @@
 package api
 
 import (
-	"fmt"
 	"github.com/brianvoe/gofakeit"
 	"github.com/labstack/echo/v4"
+	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 func FileUpload(c echo.Context) error {
@@ -25,18 +26,23 @@ func FileUpload(c echo.Context) error {
 	}
 
 	// Destination
-	dst, err := os.Create("files/" + file.Filename)
+	dst, err := os.Create(filepath.Join("files", file.Filename))
 	if err != nil {
 		return err
 	}
 	defer dst.Close()
+
+	// Copy
+	if _, err = io.Copy(dst, src); err != nil {
+		return err
+	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status": 200,
 		"data": map[string]interface{}{
 			"createdAt": gofakeit.Date(),
 			"creator":   gofakeit.Username(),
-			"location":  "files/" + file.Filename,
+			"location":  filepath.Join("files", file.Filename),
 			"size":      file.Size,
 		},
 	})
@@ -52,9 +58,6 @@ func FileDownload(c echo.Context) error {
 			dataset = datasetList[i]
 		}
 	}
-
-	fmt.Printf("*****************\n")
-	fmt.Println(dataset.Location)
 
 	return c.Attachment(dataset.Location, "dataset.csv")
 }
