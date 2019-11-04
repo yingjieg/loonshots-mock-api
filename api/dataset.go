@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/brianvoe/gofakeit"
 	"github.com/labstack/echo/v4"
+	"loonshots-mock-api/utils"
 	"net/http"
 	"time"
 )
@@ -15,22 +16,20 @@ type Dataset struct {
 	Size      int       `json:"size"`
 }
 
-var datasets []Dataset
+var datasetList []Dataset
 
 func init() {
-	datasets = append(datasets, Dataset{
-		Id:        gofakeit.UUID(),
-		Location:  "s3://data.appen.com/storage//object/buckets/xyz/abx.d",
-		Creator:   gofakeit.Email(),
-		CreatedAt: time.Time{},
-		Size:      gofakeit.Number(100, 10000),
-	}, Dataset{
-		Id:        gofakeit.UUID(),
-		Location:  "s3://data.appen.com/storage/object/buckets/xyz/abx.d",
-		Creator:   gofakeit.Email(),
-		CreatedAt: time.Time{},
-		Size:      gofakeit.Number(100, 10000),
-	})
+	files, _ := utils.ListFolder("files")
+
+	for i := 0; i < len(files); i++ {
+		datasetList = append(datasetList, Dataset{
+			Id:        gofakeit.UUID(),
+			Location:  files[i],
+			Creator:   gofakeit.Username(),
+			CreatedAt: time.Time{},
+			Size:      gofakeit.Number(100, 10000),
+		})
+	}
 }
 
 func GetDatasets(c echo.Context) error {
@@ -38,18 +37,10 @@ func GetDatasets(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status": 200,
 		"data": map[string]interface{}{
-			"totalItem": len(datasets),
-			"content":   datasets,
+			"totalElement": len(datasetList),
+			"content":      datasetList,
 		},
 	})
-}
-
-func UploadDataset(c echo.Context) error {
-	return nil
-}
-
-func DownloadDataset(c echo.Context) error {
-	return nil
 }
 
 func PreviewDataset(c echo.Context) error {

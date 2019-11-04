@@ -47,6 +47,8 @@ func main() {
 
 	// dataset
 	e.GET("/api/v1/dataset", api.GetDatasets)
+	e.POST("/api/v1/dataset-upload", api.FileUpload)
+	e.GET("/api/v1/dataset-download", api.FileDownload)
 
 	// task
 	e.GET("/api/v1/tasks", api.GetTasks)
