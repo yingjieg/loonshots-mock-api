@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 	"io/ioutil"
@@ -106,15 +105,11 @@ func SubmitTemplateByJobId(c echo.Context) error {
 		return err
 	}
 
-	fmt.Printf("************************* %s\n", jobId)
-	fmt.Printf("%+v\n", tmpl)
-	fmt.Println("-------------------------------")
 	savedTemplates[jobId] = tmpl
 
-	return c.NoContent(http.StatusOK)
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status": 200,
-		"data": tmpl,
+		"data":   tmpl,
 	})
 
 }
