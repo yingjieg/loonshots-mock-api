@@ -36,6 +36,7 @@ func main() {
 
 	// job
 	e.GET("/api/v1/jobs", api.GetJobs)
+	e.GET("/api/v1/job", api.GetJob)
 	e.POST("/api/v1/jobs", api.CreateJob)
 	e.PUT("/api/v1/jobs", api.UpdateJob)
 
