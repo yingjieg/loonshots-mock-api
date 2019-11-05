@@ -98,7 +98,7 @@ type JobPayload struct {
 	JobType               string `json:"job_type"`
 	ProjectId             string `json:"project_id"`
 	PrecedingJobId        string `json:"preceding_job_id"`
-	DatasetInputLocation  string `json:dataset_input_location`
+	DatasetInputLocation  string `json:"dataset_input_location"`
 	DatasetOutputLocation string `json:"dataset_output_location"`
 	TemplateCategory      string `json:"labeling_category"`
 	TemplateId            string `json:"template_id"`
