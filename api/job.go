@@ -17,7 +17,6 @@ type Job struct {
 	Status    string    `json:"status"`
 }
 
-
 func init() {
 	for i := 0; i < 20; i++ {
 		jobs = append(jobs, Job{
@@ -41,27 +40,27 @@ func GetJobs(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status": 200,
 		"data": map[string]interface{}{
-            "totalElements": len(jobs),
-            "content": jobs,
-        },
+			"totalElements": len(jobs),
+			"content":       jobs,
+		},
 	})
 }
 func GetJob(c echo.Context) error {
-    job := Job{
-    		JobId: gofakeit.UUID(),
-    		Name:  gofakeit.Address().Address,
-    		Project: Project{
-    			Name:      "Project: " + gofakeit.Name(),
-    			ProjectId: gofakeit.UUID(),
-    		},
-    		Creator:   "Yingying",
-    		CreatedAt: time.Time{},
-    		Status:    "draft",
-    	}
+	job := Job{
+		JobId: gofakeit.UUID(),
+		Name:  gofakeit.Address().Address,
+		Project: Project{
+			Name:      "Project: " + gofakeit.Name(),
+			ProjectId: gofakeit.UUID(),
+		},
+		Creator:   "Yingying",
+		CreatedAt: time.Time{},
+		Status:    "draft",
+	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-    		"status": 200,
-    		"data":   job,
-    	})
+		"status": 200,
+		"data":   job,
+	})
 }
 
 /*
