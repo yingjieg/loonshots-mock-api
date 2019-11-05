@@ -8,17 +8,23 @@ import (
 )
 
 type Job struct {
-	JobId     string    `json:"jobId"`
-	Name      string    `json:"name"`
-	Project   Project   `json:"project"`
-	Creator   string    `json:"creator"`
-	Category  string    `json:"category"`
-	CreatedAt time.Time `json:"createdAt"`
-	Status    string    `json:"status"`
+	JobId                 string    `json:"jobId"`
+	JobType               string    `json:"jobType"`
+	Name                  string    `json:"name"`
+	Project               Project   `json:"project"`
+	PrecedingJobId        string    `json:precedingJobId`
+	DatasetInputLocation  string    `json:"datasetInputLocation"`
+	DatasetOutputLocation string    `json:"datasetOutputLocation"`
+	Creator               string    `json:"creator"`
+	Category              string    `json:"category"`
+	WorkerNumPerTask      int       `json:"workerNumPerTask"`
+	RecordNumPerTask      int       `json:"recordNumPerTask"`
+	CreatedAt             time.Time `json:"createdAt"`
+	Status                string    `json:"status"`
 }
 
 func init() {
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 5; i++ {
 		jobs = append(jobs, Job{
 			JobId: gofakeit.UUID(),
 			Name:  gofakeit.Address().Address,
@@ -46,6 +52,18 @@ func GetJobs(c echo.Context) error {
 	})
 }
 func GetJob(c echo.Context) error {
+
+	jobId := c.QueryParam("jobId")
+
+	for i := 0; i < len(jobs); i++ {
+		if jobs[i].JobId == jobId {
+			return c.JSON(http.StatusOK, map[string]interface{}{
+				"status": 200,
+				"data":   jobs[i],
+			})
+		}
+	}
+
 	job := Job{
 		JobId: gofakeit.UUID(),
 		Name:  gofakeit.Address().Address,
@@ -82,6 +100,7 @@ type JobPayload struct {
 	PrecedingJobId        string `json:"preceding_job_id"`
 	DatasetInputLocation  string `json:dataset_input_location`
 	DatasetOutputLocation string `json:"dataset_output_location"`
+	TemplateCategory      string `json:"labeling_category"`
 	TemplateId            string `json:"template_id"`
 	RecordNumPerTask      int    `json:"record_num_per_task"`
 	WorkerNumPerTask      int    `json:"worker_num_per_task"`
@@ -94,16 +113,22 @@ func CreateJob(c echo.Context) error {
 	}
 
 	job := Job{
-		JobId: gofakeit.UUID(),
-		Name:  jobPayload.JobName,
+		JobId:   gofakeit.UUID(),
+		JobType: jobPayload.JobType,
+		Name:    jobPayload.JobName,
 		Project: Project{
 			Name:      "Project: " + gofakeit.Name(),
 			ProjectId: jobPayload.ProjectId,
 		},
-		Creator:   "Yingjie",
-		CreatedAt: time.Time{},
-		Category:  "labeling_job",
-		Status:    "draft",
+		Creator:               "Yingjie",
+		CreatedAt:             time.Time{},
+		Status:                "draft",
+		Category:              jobPayload.TemplateCategory,
+		PrecedingJobId:        jobPayload.PrecedingJobId,
+		DatasetInputLocation:  jobPayload.DatasetInputLocation,
+		DatasetOutputLocation: jobPayload.DatasetOutputLocation,
+		WorkerNumPerTask:      jobPayload.WorkerNumPerTask,
+		RecordNumPerTask:      jobPayload.RecordNumPerTask,
 	}
 
 	jobs = append(jobs, job)
