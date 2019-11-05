@@ -28,6 +28,7 @@ type Template struct {
 	Content      string `json:"content"`
 	Instruction  string `json:"instruction"`
 	Css          string `json:"css"`
+	Js           string `json:"js"`
 	Options      string `json:"options"`
 	TemplateType string `json:"type"`
 	JobId        string `json:"jobId"`

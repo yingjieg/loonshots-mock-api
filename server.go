@@ -54,6 +54,9 @@ func main() {
 	// task
 	e.GET("/api/v1/tasks", api.GetTasks)
 
+	// task records
+	e.GET("/api/v1/records", api.GetTaskRecords)
+
 	/* ------------------------------------------------- */
 
 	// Start server

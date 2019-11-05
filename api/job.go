@@ -12,6 +12,7 @@ type Job struct {
 	Name      string    `json:"name"`
 	Project   Project   `json:"project"`
 	Creator   string    `json:"creator"`
+	Category  string    `json:"category"`
 	CreatedAt time.Time `json:"createdAt"`
 	Status    string    `json:"status"`
 }
@@ -27,8 +28,9 @@ func init() {
 				ProjectId: gofakeit.UUID(),
 			},
 			Creator:   gofakeit.Email(),
+			Category:  "labeling_job",
 			CreatedAt: gofakeit.Date(),
-			Status:    gofakeit.State(),
+			Status:    gofakeit.RandString([]string{"draft", "launched", "started", "stopped"}),
 		})
 	}
 }
@@ -101,6 +103,7 @@ func CreateJob(c echo.Context) error {
 		},
 		Creator:   "Yingjie",
 		CreatedAt: time.Time{},
+		Category:  "labeling_job",
 		Status:    "draft",
 	}
 
