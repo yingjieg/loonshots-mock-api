@@ -24,7 +24,7 @@ type Job struct {
 }
 
 func init() {
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 1; i++ {
 		jobs = append(jobs, Job{
 			JobId: gofakeit.UUID(),
 			Name:  gofakeit.Address().Address,
@@ -94,16 +94,16 @@ template_id: "80dfe301-db41-40b9-94d5-d2ec38fe95db"
 worker_num_per_task: "10"
 */
 type JobPayload struct {
-	JobName               string `json:"job_name"`
-	JobType               string `json:"job_type"`
-	ProjectId             string `json:"project_id"`
-	PrecedingJobId        string `json:"preceding_job_id"`
-	DatasetInputLocation  string `json:"dataset_input_location"`
-	DatasetOutputLocation string `json:"dataset_output_location"`
-	TemplateCategory      string `json:"labeling_category"`
-	TemplateId            string `json:"template_id"`
-	RecordNumPerTask      int    `json:"record_num_per_task"`
-	WorkerNumPerTask      int    `json:"worker_num_per_task"`
+	JobName               string `json:"jobName"`
+	JobType               string `json:"jobType"`
+	ProjectId             string `json:"projectId"`
+	PrecedingJobId        string `json:"precedingJobId"`
+	DatasetInputLocation  string `json:"datasetInputLocation"`
+	DatasetOutputLocation string `json:"datasetOutputLocation"`
+	TemplateCategory      string `json:"labelingCategory"`
+	TemplateId            string `json:"templateId"`
+	RecordNumPerTask      int    `json:"recordNumPerTask"`
+	WorkerNumPerTask      int    `json:"workerNumPerTask"`
 }
 
 func CreateJob(c echo.Context) error {
