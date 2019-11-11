@@ -9,9 +9,10 @@ import (
 
 type Job struct {
 	JobId           string    `json:"id"`
+	ProjectId       string    `json:"projectId"`
 	JobType         string    `json:"jobType"`
 	JobName         string    `json:"jobName"`
-	PreconditionJob string    `json:preconditionJob`
+	PreconditionJob string    `json:"preconditionJob"`
 	SourceFile      string    `json:"sourceFile"`
 	TargetTopic     string    `json:"targetTopic"`
 	DataSelection   int       `json:"dataSelection"`
@@ -95,6 +96,7 @@ func CreateJob(c echo.Context) error {
 
 	job := Job{
 		JobId:           gofakeit.UUID(),
+		ProjectId:       jobPayload.ProjectId,
 		JobType:         jobPayload.JobType,
 		JobName:         jobPayload.JobName,
 		Owner:           "Yingjie",
@@ -116,6 +118,19 @@ func CreateJob(c echo.Context) error {
 }
 
 func UpdateJob(c echo.Context) error {
+	jobId := c.QueryParam("jobId")
+
+	var job Job
+	if err := c.Bind(&job); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(jobs); i++ {
+		if jobs[i].JobId == jobId {
+			jobs[i] = job
+		}
+	}
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status": 200,
 		"data": map[string]interface{}{

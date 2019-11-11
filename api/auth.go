@@ -92,8 +92,8 @@ func UserLogout(c echo.Context) error {
 
 func GetCurrentUser(c echo.Context) error {
 	userInfo := UserInfo{
-		Name:        loggedUser,
-		Email:       loggedUser + "@appen.com",
+		Name:        "admin",
+		Email:       "admin@appen.com",
 		NotifyCount: 0,
 		UnreadCount: 0,
 		Avatar:      "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png",
