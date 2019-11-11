@@ -14,13 +14,16 @@ type ProjectPayload struct {
 }
 
 type Project struct {
-	Name        string    `json:"name"`
-	ProjectId   string    `json:"projectId"`
-	Logo        string    `json:"logo"`
-	Description string    `json:"description"`
-	WorkdayId   string    `json:"workdayId"`
-	Creator     string    `json:"creator"`
-	CreatedAt   time.Time `json:"createdAt"`
+	ProjectId    string    `json:"id"`
+	Name         string    `json:"name"`
+	Logo         string    `json:"logo"`
+	Description  string    `json:"description"`
+	WorkdayId    string    `json:"workdayId"`
+	TenantId     string    `json:"tenantId"`
+	ProjectOwner string    `json:"projectOwner"`
+	CreatedAt    time.Time `json:"createdAt"`
+	tag          string    `json:"tag"`
+	version      int       `json:"version"`
 }
 
 func init() {
@@ -28,12 +31,12 @@ func init() {
 
 	for i := 0; i < 5; i++ {
 		projects = append(projects, Project{
-			Name:        gofakeit.Company(),
-			ProjectId:   gofakeit.UUID(),
-			Description: gofakeit.Quote(),
-			WorkdayId:   "99288123",
-			Creator:     gofakeit.Email(),
-			CreatedAt:   gofakeit.Date(),
+			Name:         gofakeit.Company(),
+			ProjectId:    gofakeit.UUID(),
+			Description:  gofakeit.Quote(),
+			WorkdayId:    "99288123",
+			ProjectOwner: gofakeit.Email(),
+			CreatedAt:    gofakeit.Date(),
 		})
 	}
 
@@ -56,12 +59,12 @@ func CreateProject(c echo.Context) error {
 	}
 
 	project := Project{
-		Name:        projectPayload.Name,
-		ProjectId:   gofakeit.UUID(),
-		Description: gofakeit.Quote(),
-		WorkdayId:   projectPayload.WorkdayId,
-		Creator:     loggedUser,
-		CreatedAt:   time.Time{},
+		Name:         projectPayload.Name,
+		ProjectId:    gofakeit.UUID(),
+		Description:  gofakeit.Quote(),
+		WorkdayId:    projectPayload.WorkdayId,
+		ProjectOwner: loggedUser,
+		CreatedAt:    time.Time{},
 	}
 
 	projects = append(projects, project)

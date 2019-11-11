@@ -12,7 +12,7 @@ type Task struct {
 	ProjectName string    `json:"projectName"`
 	JobId       string    `json:"jobId"`
 	JobName     string    `json:"jobName"`
-	JobCategory string    `json:"jobCategory"`
+	JobType     string    `json:"jobType"`
 	StartTime   time.Time `json:"startTime"`
 	EndTime     time.Time `json:"endTime"`
 	Status      string    `json:"status"`
@@ -30,8 +30,8 @@ func GetTasks(c echo.Context) error {
 			Id:          gofakeit.UUID(),
 			ProjectName: gofakeit.Name(),
 			JobId:       jobs[i].JobId,
-			JobName:     jobs[i].Name,
-			JobCategory: jobs[i].Category,
+			JobName:     jobs[i].JobName,
+			JobType:     jobs[i].JobType,
 			StartTime:   time.Time{},
 			EndTime:     time.Time{},
 			Status:      gofakeit.RandString([]string{"TODO", "DONE"}),

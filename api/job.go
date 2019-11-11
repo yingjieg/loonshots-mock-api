@@ -8,32 +8,27 @@ import (
 )
 
 type Job struct {
-	JobId                 string    `json:"jobId"`
-	JobType               string    `json:"jobType"`
-	Name                  string    `json:"name"`
-	Project               Project   `json:"project"`
-	PrecedingJobId        string    `json:precedingJobId`
-	DatasetInputLocation  string    `json:"datasetInputLocation"`
-	DatasetOutputLocation string    `json:"datasetOutputLocation"`
-	Creator               string    `json:"creator"`
-	Category              string    `json:"category"`
-	WorkerNumPerTask      int       `json:"workerNumPerTask"`
-	RecordNumPerTask      int       `json:"recordNumPerTask"`
-	CreatedAt             time.Time `json:"createdAt"`
-	Status                string    `json:"status"`
+	JobId           string    `json:"id"`
+	JobType         string    `json:"jobType"`
+	JobName         string    `json:"jobName"`
+	PreconditionJob string    `json:preconditionJob`
+	SourceFile      string    `json:"sourceFile"`
+	TargetTopic     string    `json:"targetTopic"`
+	DataSelection   int       `json:"dataSelection"`
+	WorkerNum       int       `json:"workerNum"`
+	RecordNum       int       `json:"recordNum"`
+	CreatedAt       time.Time `json:"createdAt"`
+	Owner           string    `json:"owner"`
+	Status          string    `json:"status"`
+	Tag             string    `json:"tag"`
 }
 
 func init() {
 	for i := 0; i < 1; i++ {
 		jobs = append(jobs, Job{
-			JobId: gofakeit.UUID(),
-			Name:  gofakeit.Address().Address,
-			Project: Project{
-				Name:      "Project: " + gofakeit.Name(),
-				ProjectId: gofakeit.UUID(),
-			},
-			Creator:   gofakeit.Email(),
-			Category:  "labeling_job",
+			JobId:     gofakeit.UUID(),
+			JobType:   "labeling",
+			JobName:   gofakeit.Address().Address,
 			CreatedAt: gofakeit.Date(),
 			Status:    gofakeit.RandString([]string{"draft", "launched", "started", "stopped"}),
 		})
@@ -65,13 +60,9 @@ func GetJob(c echo.Context) error {
 	}
 
 	job := Job{
-		JobId: gofakeit.UUID(),
-		Name:  gofakeit.Address().Address,
-		Project: Project{
-			Name:      "Project: " + gofakeit.Name(),
-			ProjectId: gofakeit.UUID(),
-		},
-		Creator:   "Yingying",
+		JobId:     gofakeit.UUID(),
+		JobName:   gofakeit.Address().Address,
+		Owner:     "Yingying",
 		CreatedAt: time.Time{},
 		Status:    "draft",
 	}
@@ -81,29 +72,19 @@ func GetJob(c echo.Context) error {
 	})
 }
 
-/*
-dataset_input_location: "test"
-dataset_output_location: "test"
-job_name: "test"
-job_type: "labeling_job"
-labeling_category: "TRANSCRIPTION"
-preceding_job_id: "2"
-project_id: "f93fe66e-5ae4-4b59-89be-15f3fa494780"
-record_num_per_task: "10"
-template_id: "80dfe301-db41-40b9-94d5-d2ec38fe95db"
-worker_num_per_task: "10"
-*/
 type JobPayload struct {
-	JobName               string `json:"jobName"`
-	JobType               string `json:"jobType"`
-	ProjectId             string `json:"projectId"`
-	PrecedingJobId        string `json:"precedingJobId"`
-	DatasetInputLocation  string `json:"datasetInputLocation"`
-	DatasetOutputLocation string `json:"datasetOutputLocation"`
-	TemplateCategory      string `json:"labelingCategory"`
-	TemplateId            string `json:"templateId"`
-	RecordNumPerTask      int    `json:"recordNumPerTask"`
-	WorkerNumPerTask      int    `json:"workerNumPerTask"`
+	JobName          string `json:"jobName"`
+	JobType          string `json:"jobType"`
+	ProjectId        string `json:"projectId"`
+	PreconditionJob  string `json:"preconditionJob"`
+	SourceFile       string `json:"sourceFile"`
+	TargetTopic      string `json:"targetTopic"`
+	TemplateCategory string `json:"labelingCategory"`
+	TemplateId       string `json:"templateId"`
+	dataSelection    int    `json:"dataSelection"`
+	RecordNum        int    `json:"recordNum"`
+	WorkerNum        int    `json:"workerNum"`
+	Tag              string `json:"tag"`
 }
 
 func CreateJob(c echo.Context) error {
@@ -113,22 +94,17 @@ func CreateJob(c echo.Context) error {
 	}
 
 	job := Job{
-		JobId:   gofakeit.UUID(),
-		JobType: jobPayload.JobType,
-		Name:    jobPayload.JobName,
-		Project: Project{
-			Name:      "Project: " + gofakeit.Name(),
-			ProjectId: jobPayload.ProjectId,
-		},
-		Creator:               "Yingjie",
-		CreatedAt:             time.Time{},
-		Status:                "draft",
-		Category:              jobPayload.TemplateCategory,
-		PrecedingJobId:        jobPayload.PrecedingJobId,
-		DatasetInputLocation:  jobPayload.DatasetInputLocation,
-		DatasetOutputLocation: jobPayload.DatasetOutputLocation,
-		WorkerNumPerTask:      jobPayload.WorkerNumPerTask,
-		RecordNumPerTask:      jobPayload.RecordNumPerTask,
+		JobId:           gofakeit.UUID(),
+		JobType:         jobPayload.JobType,
+		JobName:         jobPayload.JobName,
+		Owner:           "Yingjie",
+		CreatedAt:       time.Time{},
+		Status:          "draft",
+		PreconditionJob: jobPayload.PreconditionJob,
+		SourceFile:      jobPayload.SourceFile,
+		TargetTopic:     jobPayload.TargetTopic,
+		WorkerNum:       jobPayload.WorkerNum,
+		RecordNum:       jobPayload.RecordNum,
 	}
 
 	jobs = append(jobs, job)
@@ -143,9 +119,9 @@ func UpdateJob(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status": 200,
 		"data": map[string]interface{}{
-			"jobId":   "86c93a59-91f0-41ae-9c8e-1ab5016ba837",
-			"name":    "New Job Hello",
-			"creator": "yj",
+			"id":      "86c93a59-91f0-41ae-9c8e-1ab5016ba837",
+			"jobName": "New Job Hello",
+			"owner":   "yj",
 			"status":  "draft",
 		},
 	})
