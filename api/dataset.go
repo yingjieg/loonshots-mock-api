@@ -43,5 +43,21 @@ func GetDatasets(c echo.Context) error {
 }
 
 func PreviewDataset(c echo.Context) error {
-	return nil
+	var rows [][]string
+	for i := 0; i < 5; i++ {
+		rows = append(rows, []string{
+			gofakeit.Username(),
+			gofakeit.URL(),
+			gofakeit.Company(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"status": 200,
+		"data": map[string]interface{}{
+			"headers": []string{"username", "url", "company"},
+			"rows":    rows,
+		},
+	})
+
 }
